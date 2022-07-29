@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+     <div class="row "> 
+  <div class="col-sm-4 mt-2 offset-3 shadow mx-auto p-0 ">
+      <div class="alert alert-success">
+          <h2 >Add New ToDo</h2>
+      </div>
+      <div class="p-4">
+          <form method="post" action = '{% url "addtodo" %}'> 
+              {% csrf_token %}
+              
+              {{form.as_p}}
+              <hr>
+              <input  class="btn btn-success" type="submit" value="ADD">
+    
+          </form> 
+      </div>
+    </div> 
+
+    <div class="col-sm-6 mt-2 offset-1  mx-auto p-0">
+      
+      <div class="p-4 border ">
+        {% if todos|length == 0 %}
+        <div class="p-4">
+          <br>
+          <br><br>
+          <div class="alert alert-success text-center">
+            <p class="display-4" style="font-size :30px;">No Todos</p>
+          </div>
+          <br>
+          <br><br>
+        </div>
+        {% else %}
+        <div class="alert alert-success ">
+          <h2 >View Todo List</h2>
+        </div>
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th colspan="2">Action</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              {% for todo in todos %}
+                <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{todo.title}}</td>
+                  <td>{{todo.status}}</td>
+                  <td>{{todo.priority}}</td>
+                  <td><a href="/delete-todo/{{todo.id}}" class="btn" title="Delete">❌</a></td>
+                  {% if todo.status == 'P' %}
+                  <td><a href="/change-status/{{todo.id}}/C" class="btn" title="Mark Completed">✅ </a></td>
+                  {% else %}
+                  <td><a href="/change-status/{{todo.id}}/P" class="btn" title="Mark Pending">🕘</a></td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+          
+      </div>
+    </div> 
+
+      
+  </div>
+</div>
+{% endblock content %}
